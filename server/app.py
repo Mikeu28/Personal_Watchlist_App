@@ -8,6 +8,7 @@ def index():
     return '<h1>Phase 5 project</h1>'
 
 class Users( Resource ):
+    
     def get( self ):    
         return make_response( [ m.to_dict() for m in User.query.all() ], 200 )
     
@@ -19,3 +20,10 @@ class Shows( Resource ):
         return make_response( [ m.to_dict() for m in Show.query.all() ], 200 )
     
 api.add_resource( Shows, "/shows" )
+
+class UserShows( Resource ):
+    
+    def get( self ):
+        return make_response( [ m.to_dict() for m in UserShow.query.all() ], 200)
+
+api.add_resource( UserShows, "/usershows")
