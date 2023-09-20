@@ -11,6 +11,8 @@ db = db
 class User ( db.Model, SerializerMixin ):
     __tablename__ = 'users'
 
+    serialize_rules = ( '-user_shows', )
+
     id = db.Column( db.Integer, primary_key = True )
     username = db.Column( db.String, nullable = False )
     _password_hash = db.Column( db.String, nullable = False )
@@ -37,14 +39,14 @@ class User ( db.Model, SerializerMixin ):
         return flask_bcrypt.check_password_hash( self._password_hash, some_string.encode( 'utf-8' ) )
 
 
-    @validates( "username" )
-    def validates_username( self, key, new_first_name ):
-        if not new_first_name:
-            raise ValueError( "A Username must be provided" )
-        elif len( new_first_name ) > 20:
-            raise ValueError( "A Username must be shorter than 20 characters" )
-        else:
-            return new_first_name
+    # @validates( "username" )
+    # def validates_username( self, key, new_username):
+    #     if not new_username:
+    #         raise ValueError( "A Username must be provided" )
+    #     elif len( new_username ) > 20:
+    #         raise ValueError( "A Username must be shorter than 20 characters" )
+    #     else:
+    #         return new_username
 
 class UserShow ( db.Model, SerializerMixin ):
     __tablename__ = 'user_shows'

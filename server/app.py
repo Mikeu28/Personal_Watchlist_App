@@ -3,6 +3,7 @@ from config import app, api, db
 from flask_restful import Resource
 from flask import make_response, request
 
+
 @app.route('/')
 def index():
     return '<h1>Phase 5 project</h1>'
@@ -11,9 +12,9 @@ class Users( Resource ):
 
     def post( self ):
         data = request.json
-        the_username = data['name']
+        the_username = data['username']
         plaintext_password = data['password']
-        new_user = User( name = the_username, password_hash = plaintext_password )
+        new_user = User( username = the_username, _password_hash = plaintext_password )
 
         db.session.add( new_user )
         db.session.commit()
@@ -41,3 +42,4 @@ api.add_resource( UserShows, "/usershows")
 
 if __name__ == '__main__':
     app.run( port=5555, debug=True )
+
