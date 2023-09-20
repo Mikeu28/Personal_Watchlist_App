@@ -17,7 +17,7 @@ class User ( db.Model, SerializerMixin ):
 
     #Relationships
 
-    user_show = db.relationship( "UserShow", back_populates = "user", cascade = "all, delete-orphan" )
+    user_shows = db.relationship( "UserShow", back_populates = "user", cascade = "all, delete-orphan" )
     shows = association_proxy( "user_shows", "show" )
 
     #Validations
@@ -56,8 +56,8 @@ class UserShow ( db.Model, SerializerMixin ):
 
     #Relationships
 
-    user = db.relationship( "User", back_populates = "user_show" )
-    show = db.relationship( "Show", back_populates = "user_show" )
+    user = db.relationship( "User", back_populates = "user_shows" )
+    show = db.relationship( "Show", back_populates = "user_shows" )
 
     #Validations
 
@@ -71,7 +71,7 @@ class UserShow ( db.Model, SerializerMixin ):
 class Show ( db.Model, SerializerMixin ):
     __tablename__ = 'shows'
 
-    serialize_rules = ( '-user_show', )
+    serialize_rules = ( '-user_shows', )
 
     id = db.Column( db.Integer, primary_key = True )
     name = db.Column( db.String, nullable = False )
@@ -80,7 +80,7 @@ class Show ( db.Model, SerializerMixin ):
 
     #Relationships
 
-    user_show = db.relationship( "UserShow", back_populates = "show" )
+    user_shows = db.relationship( "UserShow", back_populates = "show" )
     users = association_proxy( "user_shows", "user" )
 
     #Validations
