@@ -28,22 +28,6 @@ class Users( Resource ):
     
 api.add_resource( Users, "/users" )
 
-@app.route ( '/login', method = [ 'POST' ] )
-def login():
-    data = request.json
-    username = data[ 'name' ]
-    password = data[ 'password' ]
-    try:
-        user = User.query.filter_by( name = username ).first()
-        if user.authenticate( password ):
-            session[ 'user_id' ]
-            response = make_response( user.to_dict(), 200 )
-            return response
-    except:
-        return make_response( { 'error': 'Name or password incorrect' }, 401 )
-
-
-
 class Shows( Resource ):
 
     def get( self ):
@@ -58,6 +42,35 @@ class UserShows( Resource ):
 
 api.add_resource( UserShows, "/usershows")
 
-if __name__ == '__main__':
-    app.run( port=5555, debug=True )
+@app.route ( '/login', method = [ 'POST' ] )
+def login():
+    data = request.json
+    username = data[ 'name' ]
+    password = data[ 'password' ]
+    try:
+        user = User.query.filter_by( name = username ).first()
+        if user.authenticate( password ):
+            session[ 'user_id' ]
+            response = make_response( user.to_dict(), 200 )
+            return response
+    except:
+        return make_response( { 'error': 'Name or password incorrect' }, 401 )
 
+@app.route( '/authorized', mehtods = [ 'GET' ] )
+def authorized():
+    try:
+        user = User.query.filter_by( id = session.get( 'user_id' ) ).first()
+        response  = make_response( user.to_dict(), 200 )
+        return response
+    except:
+        return make_response( { 'error': "User not found" }, 404 )
+    
+@app.route( '/logout', method = [ 'DELETE' ] )
+def logout():
+    session[ 'user_id' ] = None
+    return make_response( '', 204 )
+
+
+
+if __name__ == '__main__':
+    app.run( port=5555, debug = True )
