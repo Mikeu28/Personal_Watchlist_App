@@ -5,6 +5,10 @@ import Navbar from './Navbar';
 function SignUp () {
 
     const [ form, setForm ] = useState( {} )
+    const [ baseForm, setBaseForm ] = useState( {
+        name: 'Username',
+        password: 'Password',
+    } );
 
     function updateForm ( e ) {
         setForm(f => {

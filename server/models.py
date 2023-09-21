@@ -14,7 +14,7 @@ class User ( db.Model, SerializerMixin ):
     serialize_rules = ( '-user_shows', )
 
     id = db.Column( db.Integer, primary_key = True )
-    username = db.Column( db.String, nullable = False )
+    username = db.Column( db.String, nullable = False, unique = True )
     _password_hash = db.Column( db.String, nullable = False )
 
     #Relationships
@@ -39,14 +39,14 @@ class User ( db.Model, SerializerMixin ):
         return flask_bcrypt.check_password_hash( self._password_hash, some_string.encode( 'utf-8' ) )
 
 
-    # @validates( "username" )
-    # def validates_username( self, key, new_username):
-    #     if not new_username:
-    #         raise ValueError( "A Username must be provided" )
-    #     elif len( new_username ) > 20:
-    #         raise ValueError( "A Username must be shorter than 20 characters" )
-    #     else:
-    #         return new_username
+    @validates( "username" )
+    def validates_username( self, key, new_username):
+        if not new_username:
+            raise ValueError( "A Username must be provided" )
+        elif len( new_username ) > 20:
+            raise ValueError( "A Username must be shorter than 20 characters" )
+        else:
+            return new_username
 
 class UserShow ( db.Model, SerializerMixin ):
     __tablename__ = 'user_shows'
@@ -95,3 +95,10 @@ class Show ( db.Model, SerializerMixin ):
             raise ValueError("A name must be shorter than 60 characters")
         else: 
             return new_name
+    
+    @validates( "image" )
+    def validates_image( self, key, new_image ):
+        if not new_image:
+            raise ValueError( "A image must be provided" )
+        else:
+            return new_image
