@@ -42,7 +42,7 @@ class UserShows( Resource ):
 
 api.add_resource( UserShows, "/usershows")
 
-@app.route ( '/login', method = [ 'POST' ] )
+@app.route ( '/login', methods = [ 'POST' ] )
 def login():
     data = request.json
     username = data[ 'name' ]
@@ -56,7 +56,7 @@ def login():
     except:
         return make_response( { 'error': 'Name or password incorrect' }, 401 )
 
-@app.route( '/authorized', mehtods = [ 'GET' ] )
+@app.route( '/authorized', methods = [ 'GET' ] )
 def authorized():
     try:
         user = User.query.filter_by( id = session.get( 'user_id' ) ).first()
@@ -65,7 +65,7 @@ def authorized():
     except:
         return make_response( { 'error': "User not found" }, 404 )
     
-@app.route( '/logout', method = [ 'DELETE' ] )
+@app.route( '/logout', methods = [ 'DELETE' ] )
 def logout():
     session[ 'user_id' ] = None
     return make_response( '', 204 )
