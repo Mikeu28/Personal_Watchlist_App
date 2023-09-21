@@ -6,7 +6,7 @@ if __name__ == "__main__":
     with app.app_context():
         print("Clearing db...")
         Show.query.delete()
-        # User.query.delete()
+        User.query.delete()
         # UserShow.query.delete()
 
         print("Starting seed...")

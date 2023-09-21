@@ -14,7 +14,7 @@ class Users( Resource ):
         data = request.json
         the_username = data['username']
         plaintext_password = data['password']
-        new_user = User( username = the_username, _password_hash = plaintext_password )
+        new_user = User( username = the_username, password = plaintext_password )
 
         db.session.add( new_user )
         db.session.commit()
