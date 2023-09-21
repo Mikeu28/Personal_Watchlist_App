@@ -28,21 +28,23 @@ class Users( Resource ):
     
 api.add_resource( Users, "/users" )
 
-@app.route ( '/login', method = [ 'POST' ] )
-def login():
-    data = request.json
-    username = data[ 'name' ]
-    password = data[ 'password' ]
-    user = User.query.filter_by( name = username ).first()
+class Login( Resource ):        
+    def login():
+        data = request.json
+        username = data[ 'name' ]
+        password = data[ 'password' ]
+        try:
+            user = User.query.filter_by( name = username ).first()
 
-    if not user:
-        return make_response( { 'error': 'User was not found' }, 404 )
+            if user.authenticate( password ):
+                session[ 'user_id' ] = user.id
+                response = make_response( user.to_dict(), 200 )
+                return response
+        except:
+            return make_response( { 'error': 'Name or password incorrect' } ) 
     
-    if not user.authenticate( password ):
-        return make_response( { 'error': 'Password incorrect' }, 401 )
-    
-    session[ 'user_id' ] = user.id
-    return make_response( user.to_dict() )
+
+
 
 
 class Shows( Resource ):
