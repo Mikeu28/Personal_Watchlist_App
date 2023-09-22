@@ -50,7 +50,7 @@ def login():
     try:
         user = User.query.filter_by( name = username ).first()
         if user.authenticate( password ):
-            session[ 'user_id' ]
+            session[ 'user_id' ] = user
             response = make_response( user.to_dict(), 200 )
             return response
     except:
